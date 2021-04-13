@@ -39,3 +39,7 @@ Vue.component("cat-image", {
       }
     }
   });
+  console.log('holi')
+  if(module.hot) {
+    module.hot.accept()
+  }

@@ -2,12 +2,14 @@ const path = require('path')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
 
-module.exports = (env, arg) => {
+module.exports = (env, argv) => {
+  const isDevelopment = argv.mode === 'development'
   return {
     entry: './src/js/main.js',
     output: {
-      filename: '[name].[contenthash].bundle.js',
-      path: path.resolve(__dirname, 'dist')
+      filename: '[name].[hash].bundle.js',
+      path: path.resolve(__dirname, 'dist'),
+      clean: true
     },
     resolve: {
       alias: {
@@ -19,8 +21,21 @@ module.exports = (env, arg) => {
         chunks: 'all'    
       }
     },
+    mode: argv.mode,
+    devtool: isDevelopment ? 'cheap-source-map' : 'source-map', 
+    devServer: {
+      contentBase: './dist',
+      hot: true
+    },
     module: {
       rules: [
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader'
+          }
+        },
         {
           test: /\.css$/,
           use: [MiniCSSExtractPlugin.loader, 'css-loader']
