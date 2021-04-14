@@ -1,3 +1,42 @@
+<template>
+  <main>
+    <a @click="getCat" href="#">Cat's please 🙀</a>
+    <CatImage
+      v-for="(image, $index) in catImages"
+      :url="image" :key="$index"/>
+  </main>
+</template>
+
+<script>
+import CatImage from './components/CatImage.vue'
+
+export default {
+  name: 'App',
+  components: {
+    CatImage
+  },
+  data() {
+    return {
+      catImages: ["https://cdn2.thecatapi.com/images/bun.jpg"]
+    }
+  },
+  methods: {
+    async getCat() {
+      try {
+        const request = await fetch(
+         "https://api.thecatapi.com/v1/images/search"
+        );
+        const cat = await request.json();
+        this.catImages.push(cat[0].url);
+        } catch (error) {
+          console.error(error);
+        }
+    }
+  }
+}
+</script>
+
+<style lang="scss">
 /* General */
 * {
     box-sizing: border-box;
@@ -16,7 +55,7 @@
   
   header {
     text-align: center;
-    background-image: url("../img/black-cat.jpg");
+    background-image: url("./img/black-cat.jpg");
     background-size: cover;
     background-position: center;
   }
@@ -32,7 +71,7 @@
   main {
     padding: 0.5rem;
     min-height: 100vh;
-    background-color: gray;
+    background-color: $corporate;
     display: grid;
     grid-gap: 0.5rem;
     grid:
@@ -71,3 +110,4 @@
     grid-row-end: span 3;
     grid-column-end: span 3;
   }
+</style>

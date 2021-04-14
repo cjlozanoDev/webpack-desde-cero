@@ -1,6 +1,7 @@
 const path = require('path')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = (env, argv) => {
   const isDevelopment = argv.mode === 'development'
@@ -13,7 +14,8 @@ module.exports = (env, argv) => {
     },
     resolve: {
       alias: {
-        'vue$': 'vue/dist/vue.esm.js'    
+        'vue$': 'vue/dist/vue.esm.js',
+        '@': path.resolve(__dirname, 'src'),
       }
     },
     optimization: {
@@ -37,9 +39,21 @@ module.exports = (env, argv) => {
           }
         },
         {
-          test: /\.css$/,
-          use: [MiniCSSExtractPlugin.loader, 'css-loader']
-          // use: ['style-loader', 'css-loader']
+          test: /\.vue$/,
+          loader: 'vue-loader'
+        },
+        {
+          test: /\.scss$/,
+          use: [
+            isDevelopment ? 'vue-style-loader' : MiniCSSExtractPlugin.loader,
+            'css-loader',
+            {
+              loader: 'sass-loader',
+              options: {
+                additionalData: `
+                  @import "./css/global.scss";`
+              }
+            }]
         },
         {
           test: /\.(png|svg|jpg|jpeg|gif)$/,
@@ -48,6 +62,7 @@ module.exports = (env, argv) => {
       ]
     },
     plugins: [
+      new VueLoaderPlugin(),
       new MiniCSSExtractPlugin(),
       new HTMLWebpackPlugin({
         title: 'WebPack desde cero',
