@@ -8,7 +8,7 @@ module.exports = (env, argv) => {
   return {
     entry: './src/js/main.js',
     output: {
-      filename: '[name].[hash].bundle.js',
+      filename: '[name].[contenthash].bundle.js',
       path: path.resolve(__dirname, 'dist'),
       clean: true
     },
@@ -19,8 +19,17 @@ module.exports = (env, argv) => {
       }
     },
     optimization: {
+      usedExports: true,
+      runtimeChunk: 'single',
       splitChunks: {
-        chunks: 'all'    
+        maxSize: 10000,
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all' 
+          }
+        }
       }
     },
     mode: argv.mode,
@@ -50,8 +59,7 @@ module.exports = (env, argv) => {
             {
               loader: 'sass-loader',
               options: {
-                additionalData: `
-                  @import "./css/global.scss";`
+                additionalData: `@import "src/css/global.scss";`
               }
             }]
         },
