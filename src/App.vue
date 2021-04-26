@@ -1,11 +1,16 @@
 <template>
   <main>
-    <AppOptin v-if="showOptin"/>
+    <AppOptin v-if="showOptin" />
     <a @click="showOptin = !showOptin"> Join to our news </a>
-    <a @click="getCat" href="#">Cat's please 🙀</a>
+    <a
+      href="#"
+      @click="getCat"
+    >Cat's please 🙀</a>
     <CatImage
       v-for="(image, $index) in catImages"
-      :url="image" :key="$index"/>
+      :key="$index"
+      :url="image"
+    />
   </main>
 </template>
 
