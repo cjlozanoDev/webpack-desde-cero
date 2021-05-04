@@ -64,7 +64,7 @@ export default {
   
   header {
     text-align: center;
-    background-image: url('./img/black-cat.jpg');
+    background-image: url('../src/img/black-cat.jpg');
     background-size: cover;
     background-position: center;
   }

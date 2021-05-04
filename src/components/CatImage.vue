@@ -16,7 +16,7 @@ export default {
       return {
         "background-image": `url(${this.url})`,
         "background-size": "cover",
-        "backgrounmd-position": "center"
+        "background-position": "center"
       };
     }
   }
